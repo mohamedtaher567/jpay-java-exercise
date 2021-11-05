@@ -1,40 +1,42 @@
 package com.java.exercise.jpay.dto;
 
+import java.util.Set;
+
 public class PhoneNumbersFilterParams {
-  private PhoneNumberState state;
-  private Long countryId;
-  private int pageNumber;
-  private int pageSize;
+  private Set<String> states;
+  private Set<Integer> countriesCodes;
+  private Integer pageNumber;
+  private Integer pageSize;
 
-  public PhoneNumberState getState() {
-    return state;
+  public Set<String> getStates() {
+    return states;
   }
 
-  public void setState(PhoneNumberState state) {
-    this.state = state;
+  public void setStates(Set<String> states) {
+    this.states = states;
   }
 
-  public Long getCountryId() {
-    return countryId;
+  public Set<Integer> getCountriesCodes() {
+    return countriesCodes;
   }
 
-  public void setCountryId(Long countryId) {
-    this.countryId = countryId;
+  public void setCountriesCodes(Set<Integer> countriesCodes) {
+    this.countriesCodes = countriesCodes;
   }
 
-  public int getPageNumber() {
+  public Integer getPageNumber() {
     return pageNumber;
   }
 
-  public void setPageNumber(int pageNumber) {
+  public void setPageNumber(Integer pageNumber) {
     this.pageNumber = pageNumber;
   }
 
-  public int getPageSize() {
+  public Integer getPageSize() {
     return pageSize;
   }
 
-  public void setPageSize(int pageSize) {
+  public void setPageSize(Integer pageSize) {
     this.pageSize = pageSize;
   }
 

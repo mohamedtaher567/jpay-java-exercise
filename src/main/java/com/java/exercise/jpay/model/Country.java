@@ -1,12 +1,13 @@
 package com.java.exercise.jpay.model;
 
-public class Country extends HasId {
+public class Country {
   private Integer countryCode;
   private String validationRegex;
+  private String name;
 
-  public Country(Long id, Integer countryCode, String validationRegex) {
-    setId(id);
+  public Country(Integer countryCode, String name, String validationRegex) {
     this.countryCode = countryCode;
+    this.name = name;
     this.validationRegex = validationRegex;
   }
 
@@ -24,6 +25,14 @@ public class Country extends HasId {
 
   public void setValidationRegex(String validationRegex) {
     this.validationRegex = validationRegex;
+  }
+
+  public String getName() {
+    return name;
+  }
+
+  public void setName(String name) {
+    this.name = name;
   }
 
 }

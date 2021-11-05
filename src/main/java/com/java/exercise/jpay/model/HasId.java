@@ -1,13 +1,21 @@
 package com.java.exercise.jpay.model;
 
-public class HasId {
-  private Long id;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.MappedSuperclass;
 
-  public Long getId() {
+@MappedSuperclass
+public abstract class HasId {
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private Integer id;
+
+  public Integer getId() {
     return id;
   }
 
-  public void setId(Long id) {
+  public void setId(Integer id) {
     this.id = id;
   }
 
