@@ -1,6 +1,5 @@
 package com.java.exercise.jpay.service.impl;
 
-import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -11,6 +10,7 @@ import org.springframework.util.CollectionUtils;
 import com.java.exercise.jpay.constants.CountriesStore;
 import com.java.exercise.jpay.dto.PhoneNumber;
 import com.java.exercise.jpay.dto.PhoneNumbersFilterParams;
+import com.java.exercise.jpay.dto.PhoneNumbersResponse;
 import com.java.exercise.jpay.repository.CustomerRepository;
 import com.java.exercise.jpay.service.PhoneNumbersService;
 import com.java.exercise.jpay.utils.PhoneNumberValidationUtils;
@@ -22,8 +22,9 @@ public class CustomerPhoneNumbersService implements PhoneNumbersService {
   private CustomerRepository customerRepo;
 
   @Override
-  public List<PhoneNumber> getPhoneNumbers(PhoneNumbersFilterParams filterParams) {
-    return customerRepo.findAll().stream().filter(customer -> {
+  public PhoneNumbersResponse getPhoneNumbers(PhoneNumbersFilterParams filterParams) {
+    PhoneNumbersResponse phoneNumbers = new PhoneNumbersResponse();
+    phoneNumbers.setPhoneNumbers(customerRepo.findAll().stream().filter(customer -> {
       Set<Integer> coutnryCodes = filterParams.getCountriesCodes();
       Set<String> states = filterParams.getStates();
       String phoneNumber = customer.getPhone();
@@ -34,7 +35,8 @@ public class CustomerPhoneNumbersService implements PhoneNumbersService {
       String phoneNumber = customer.getPhone();
       return new PhoneNumber(phoneNumber,
           CountriesStore.COUNTRIES_VALIDATION_REGEX.get(PhoneNumberValidationUtils.findCountryCode(phoneNumber)).getName());
-    }).collect(Collectors.toList());
+    }).collect(Collectors.toList()));
+    return phoneNumbers;
   }
 
 }
