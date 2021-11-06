@@ -16,7 +16,7 @@ import com.java.exercise.jpay.service.PhoneNumbersService;
 import com.java.exercise.jpay.utils.PhoneNumberValidationUtils;
 
 @Service("CustomerPhoneNumersService")
-public class CustomerPhoneNumbersService implements PhoneNumbersService {
+public class CustomerPhoneNumbersServiceImpl implements PhoneNumbersService {
 
   @Autowired
   private CustomerRepository customerRepo;
@@ -29,8 +29,8 @@ public class CustomerPhoneNumbersService implements PhoneNumbersService {
       Set<String> states = filterParams.getStates();
       String phoneNumber = customer.getPhone();
       Integer countryCode = PhoneNumberValidationUtils.findCountryCode(phoneNumber);
-      return (CollectionUtils.isEmpty(coutnryCodes) || coutnryCodes.contains(countryCode) && (CollectionUtils.isEmpty(states)
-          || states.contains(PhoneNumberValidationUtils.getPhoneNumberState(phoneNumber, countryCode).toString())));
+      return (CollectionUtils.isEmpty(coutnryCodes) || coutnryCodes.contains(countryCode)) && (CollectionUtils.isEmpty(states)
+          || states.contains(PhoneNumberValidationUtils.getPhoneNumberState(phoneNumber, countryCode).toString()));
     }).skip(filterParams.getPageNumber() * filterParams.getPageSize()).limit(filterParams.getPageSize()).map(customer -> {
       String phoneNumber = customer.getPhone();
       return new PhoneNumber(phoneNumber,

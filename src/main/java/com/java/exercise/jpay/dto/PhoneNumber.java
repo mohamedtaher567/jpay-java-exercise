@@ -14,10 +14,6 @@ public class PhoneNumber {
     return number;
   }
 
-  public void setNumber(String number) {
-    this.number = number;
-  }
-
   public String getCountryName() {
     return countryName;
   }
@@ -26,4 +22,15 @@ public class PhoneNumber {
     this.countryName = countryName;
   }
 
+  @Override
+  public boolean equals(Object other) {
+    if (other == this) {
+      return true;
+    }
+    if (other == null) {
+      return false;
+    }
+    PhoneNumber phoneNumber = (PhoneNumber) other;
+    return countryName.equals(phoneNumber.getCountryName()) && number.equals(phoneNumber.getNumber());
+  }
 }

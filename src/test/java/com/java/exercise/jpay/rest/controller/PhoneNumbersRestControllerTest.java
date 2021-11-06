@@ -1,4 +1,4 @@
-package com.java.exercise.jpay.configuration;
+package com.java.exercise.jpay.rest.controller;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
@@ -30,6 +30,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.java.exercise.jpay.configuration.JpayApplicationTests;
 import com.java.exercise.jpay.controller.PhoneNumbersRestController;
 import com.java.exercise.jpay.controller.ResponseMessages;
 import com.java.exercise.jpay.dto.PhoneNumber;
@@ -60,7 +61,7 @@ public class PhoneNumbersRestControllerTest extends JpayApplicationTests {
   @Test
   public void testValidRequest() throws Exception {
     String payload = constructJson(createPhoneNumbersFilterParams(0, 10));
-    PhoneNumbersResponse expectedResponseObject = constructResponse(Lists.list(new PhoneNumber("123", "000")), null);
+    PhoneNumbersResponse expectedResponseObject = createPhoneNumersResponse(Lists.list(new PhoneNumber("123", "000")), null);
     String expectedResponse = constructJson(expectedResponseObject);
     when(phoneNumbersService.getPhoneNumbers(phoneNumbersFilterParamsCaptor.capture())).thenReturn(expectedResponseObject);
     verifyResponse(expectedResponse, performAndMatchStatus(payload, status().isOk()), HttpStatus.OK.value());
@@ -70,7 +71,7 @@ public class PhoneNumbersRestControllerTest extends JpayApplicationTests {
   @Test
   public void testMissingPageNumber() throws Exception {
     String payload = constructJson(createPhoneNumbersFilterParams(null, 10));
-    String expectedResponse = constructJson(constructResponse(null, ResponseMessages.MISSING_PAGE_NUMBER));
+    String expectedResponse = constructJson(createPhoneNumersResponse(null, ResponseMessages.MISSING_PAGE_NUMBER));
     verifyResponse(expectedResponse, performAndMatchStatus(payload, status().isBadRequest()), HttpStatus.BAD_REQUEST.value());
     verifyServiceHits(0);
   }
@@ -78,7 +79,7 @@ public class PhoneNumbersRestControllerTest extends JpayApplicationTests {
   @Test
   public void testMissingPageSize() throws Exception {
     String payload = constructJson(createPhoneNumbersFilterParams(0, null));
-    String expectedResponse = constructJson(constructResponse(null, ResponseMessages.MISSING_PAGE_SIZE));
+    String expectedResponse = constructJson(createPhoneNumersResponse(null, ResponseMessages.MISSING_PAGE_SIZE));
     verifyResponse(expectedResponse, performAndMatchStatus(payload, status().isBadRequest()), HttpStatus.BAD_REQUEST.value());
     verifyServiceHits(0);
   }
@@ -86,7 +87,7 @@ public class PhoneNumbersRestControllerTest extends JpayApplicationTests {
   @Test
   public void testInvalidPageSize1() throws Exception {
     String payload = constructJson(createPhoneNumbersFilterParams(0, 0));
-    String expectedResponse = constructJson(constructResponse(null, ResponseMessages.INVALID_PAGE_SIZE));
+    String expectedResponse = constructJson(createPhoneNumersResponse(null, ResponseMessages.INVALID_PAGE_SIZE));
     verifyResponse(expectedResponse, performAndMatchStatus(payload, status().isBadRequest()), HttpStatus.BAD_REQUEST.value());
     verifyServiceHits(0);
   }
@@ -94,7 +95,7 @@ public class PhoneNumbersRestControllerTest extends JpayApplicationTests {
   @Test
   public void testInvalidPageSize2() throws Exception {
     String payload = constructJson(createPhoneNumbersFilterParams(0, -1));
-    String expectedResponse = constructJson(constructResponse(null, ResponseMessages.INVALID_PAGE_SIZE));
+    String expectedResponse = constructJson(createPhoneNumersResponse(null, ResponseMessages.INVALID_PAGE_SIZE));
     verifyResponse(expectedResponse, performAndMatchStatus(payload, status().isBadRequest()), HttpStatus.BAD_REQUEST.value());
     verifyServiceHits(0);
   }
@@ -102,7 +103,7 @@ public class PhoneNumbersRestControllerTest extends JpayApplicationTests {
   @Test
   public void testInvalidPageNumber() throws Exception {
     String payload = constructJson(createPhoneNumbersFilterParams(-1, 10));
-    String expectedResponse = constructJson(constructResponse(null, ResponseMessages.INVALID_PAGE_NUMBER));
+    String expectedResponse = constructJson(createPhoneNumersResponse(null, ResponseMessages.INVALID_PAGE_NUMBER));
     verifyResponse(expectedResponse, performAndMatchStatus(payload, status().isBadRequest()), HttpStatus.BAD_REQUEST.value());
     verifyServiceHits(0);
   }
@@ -110,7 +111,7 @@ public class PhoneNumbersRestControllerTest extends JpayApplicationTests {
   @Test
   public void testEmptyContent() throws Exception {
     String payload = constructJson(createPhoneNumbersFilterParams(0, 10));
-    PhoneNumbersResponse expectedResponseObject = constructResponse(Lists.newArrayList(), null);
+    PhoneNumbersResponse expectedResponseObject = createPhoneNumersResponse(Lists.newArrayList(), null);
     String expectedResponse = constructJson(expectedResponseObject);
     when(phoneNumbersService.getPhoneNumbers(phoneNumbersFilterParamsCaptor.capture())).thenReturn(expectedResponseObject);
     verifyResponse(expectedResponse, performAndMatchStatus(payload, status().isNoContent()), HttpStatus.NO_CONTENT.value());
@@ -133,19 +134,12 @@ public class PhoneNumbersRestControllerTest extends JpayApplicationTests {
     verify(phoneNumbersService, times(n)).getPhoneNumbers(any());
   }
 
-  private static PhoneNumbersFilterParams createPhoneNumbersFilterParams(Integer pageNumber, Integer pageSize) {
-    PhoneNumbersFilterParams phoneNumbersFilterParams = new PhoneNumbersFilterParams();
-    phoneNumbersFilterParams.setPageNumber(pageNumber);
-    phoneNumbersFilterParams.setPageSize(pageSize);
-    return phoneNumbersFilterParams;
-  }
-
   private static String constructJson(Object object) throws JsonProcessingException {
     ObjectMapper objectMapper = new ObjectMapper();
     return objectMapper.writeValueAsString(object);
   }
 
-  private static PhoneNumbersResponse constructResponse(List<PhoneNumber> phoneNumbers, String errorMessage) {
+  private static PhoneNumbersResponse createPhoneNumersResponse(List<PhoneNumber> phoneNumbers, String errorMessage) {
     PhoneNumbersResponse response = new PhoneNumbersResponse();
     response.setPhoneNumbers(phoneNumbers);
     response.setErrorMessage(errorMessage);
