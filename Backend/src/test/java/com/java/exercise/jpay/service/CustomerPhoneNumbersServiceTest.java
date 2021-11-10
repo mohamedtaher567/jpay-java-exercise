@@ -27,7 +27,6 @@ import com.java.exercise.jpay.repository.CustomerRepository;
 import com.java.exercise.jpay.service.impl.CustomerPhoneNumbersServiceImpl;
 
 @TestInstance(Lifecycle.PER_CLASS)
-
 public class CustomerPhoneNumbersServiceTest extends JpayApplicationTests {
 
   private static final Set<Integer> INVALID_INDICIES = new HashSet<>();
