@@ -10,7 +10,7 @@ public class PhoneNumberValidationUtils {
   private static final String COUNTRY_CODE_EXTRACTION_REGEX = "\\((.*?)\\)";
 
   public static PhoneNumberState getPhoneNumberState(String phoneNumber, Integer countryCode) {
-    boolean validPhoneNumber = Pattern.matches(CountriesStore.COUNTRIES_VALIDATION_REGEX.get(countryCode).getValidationRegex(), phoneNumber);
+    boolean validPhoneNumber = Pattern.matches(CountriesStore.COUNTRIES_STATIC_INFO.get(countryCode).getValidationRegex(), phoneNumber);
     PhoneNumberState stateEnum = null;
     if (validPhoneNumber) {
       stateEnum = PhoneNumberState.VALID;
