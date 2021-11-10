@@ -4,6 +4,7 @@ import java.util.List;
 
 public class PhoneNumbersResponse {
   private List<PhoneNumber> phoneNumbers;
+  private Long totalCount;
   private String errorMessage;
 
   public List<PhoneNumber> getPhoneNumbers() {
@@ -12,6 +13,14 @@ public class PhoneNumbersResponse {
 
   public void setPhoneNumbers(List<PhoneNumber> phoneNumbers) {
     this.phoneNumbers = phoneNumbers;
+  }
+
+  public Long getTotalCount() {
+    return totalCount;
+  }
+
+  public void setTotalCount(Long totalCount) {
+    this.totalCount = totalCount;
   }
 
   public String getErrorMessage() {
