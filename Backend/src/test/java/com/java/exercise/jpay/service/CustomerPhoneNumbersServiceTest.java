@@ -78,7 +78,7 @@ public class CustomerPhoneNumbersServiceTest extends JpayApplicationTests {
 
   @Test
   public void testFindAllPhoneNumbers() {
-    PhoneNumbersResponse phoneNumbers = phoneNumersService.getPhoneNumbers(createPhoneNumbersFilterParams(0, 10));
+    PhoneNumbersResponse phoneNumbers = phoneNumersService.getPhoneNumbers(createPhoneNumbersFilterParams(1, 10));
     assertEquals(TEST_PHONE_NUMBERS, phoneNumbers.getPhoneNumbers());
   }
 
@@ -87,7 +87,7 @@ public class CustomerPhoneNumbersServiceTest extends JpayApplicationTests {
     Set<Integer> countryCodes = new HashSet<>();
     countryCodes.add(212);
     countryCodes.add(258);
-    PhoneNumbersResponse phoneNumbers = phoneNumersService.getPhoneNumbers(createPhoneNumbersFilterParams(0, 10, null, countryCodes));
+    PhoneNumbersResponse phoneNumbers = phoneNumersService.getPhoneNumbers(createPhoneNumbersFilterParams(1, 10, null, countryCodes));
     assertEquals(TEST_PHONE_NUMBERS.stream()
         .filter(phoneNumber -> phoneNumber.getCountryName().equals(MOROCO) || phoneNumber.getCountryName().equals(MOZAMBIQUE))
         .collect(Collectors.toList()), phoneNumbers.getPhoneNumbers());
@@ -97,7 +97,7 @@ public class CustomerPhoneNumbersServiceTest extends JpayApplicationTests {
   public void testFilterStates1() {
     Set<String> states = new HashSet<>();
     states.add(PhoneNumberState.INVALID.toString());
-    PhoneNumbersResponse phoneNumbers = phoneNumersService.getPhoneNumbers(createPhoneNumbersFilterParams(0, 10, states, null));
+    PhoneNumbersResponse phoneNumbers = phoneNumersService.getPhoneNumbers(createPhoneNumbersFilterParams(1, 10, states, null));
     assertEquals(filterPhoneNumbers(TEST_PHONE_NUMBERS, INVALID_INDICIES, true), phoneNumbers.getPhoneNumbers());
   }
 
@@ -105,7 +105,7 @@ public class CustomerPhoneNumbersServiceTest extends JpayApplicationTests {
   public void testFilterStates2() {
     Set<String> states = new HashSet<>();
     states.add(PhoneNumberState.VALID.toString());
-    PhoneNumbersResponse phoneNumbers = phoneNumersService.getPhoneNumbers(createPhoneNumbersFilterParams(0, 10, states, null));
+    PhoneNumbersResponse phoneNumbers = phoneNumersService.getPhoneNumbers(createPhoneNumbersFilterParams(1, 10, states, null));
     assertEquals(filterPhoneNumbers(TEST_PHONE_NUMBERS, INVALID_INDICIES, false), phoneNumbers.getPhoneNumbers());
   }
 
@@ -114,7 +114,7 @@ public class CustomerPhoneNumbersServiceTest extends JpayApplicationTests {
     Set<String> states = new HashSet<>();
     states.add(PhoneNumberState.VALID.toString());
     states.add(PhoneNumberState.INVALID.toString());
-    PhoneNumbersResponse phoneNumbers = phoneNumersService.getPhoneNumbers(createPhoneNumbersFilterParams(0, 10, states, null));
+    PhoneNumbersResponse phoneNumbers = phoneNumersService.getPhoneNumbers(createPhoneNumbersFilterParams(1, 10, states, null));
     assertEquals(TEST_PHONE_NUMBERS, phoneNumbers.getPhoneNumbers());
   }
 
@@ -125,7 +125,7 @@ public class CustomerPhoneNumbersServiceTest extends JpayApplicationTests {
     countryCodes.add(251);
     Set<String> states = new HashSet<>();
     states.add(PhoneNumberState.INVALID.toString());
-    PhoneNumbersResponse phoneNumbers = phoneNumersService.getPhoneNumbers(createPhoneNumbersFilterParams(0, 10, states, countryCodes));
+    PhoneNumbersResponse phoneNumbers = phoneNumersService.getPhoneNumbers(createPhoneNumbersFilterParams(1, 10, states, countryCodes));
     assertEquals(filterPhoneNumbers(TEST_PHONE_NUMBERS, Sets.newLinkedHashSet(3, 6), true), phoneNumbers.getPhoneNumbers());
   }
 

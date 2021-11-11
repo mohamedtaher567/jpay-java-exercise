@@ -15,6 +15,9 @@ import com.java.exercise.jpay.controller.response.entity.ResponseEntityHandler;
 import com.java.exercise.jpay.dto.PhoneNumbersFilterParams;
 import com.java.exercise.jpay.dto.PhoneNumbersResponse;
 import com.java.exercise.jpay.service.PhoneNumbersService;
+import com.java.exercise.jpay.utils.FilterParametersValidationUtils;
+
+import exceptions.InvalidParametersException;
 
 @RequestMapping("phoneNumbers")
 @RestController
@@ -28,23 +31,15 @@ public class PhoneNumbersRestController {
   public ResponseEntity<PhoneNumbersResponse> getPhoneNumbers(@RequestBody PhoneNumbersFilterParams filterParams) {
     PhoneNumbersResponse response = new PhoneNumbersResponse();
     HttpStatus status = HttpStatus.OK;
-    if (filterParams.getPageNumber() == null) {
-      response.setErrorMessage(ResponseMessages.MISSING_PAGE_NUMBER);
-      status = HttpStatus.BAD_REQUEST;
-    } else if (filterParams.getPageSize() == null) {
-      response.setErrorMessage(ResponseMessages.MISSING_PAGE_SIZE);
-      status = HttpStatus.BAD_REQUEST;
-    } else if (filterParams.getPageSize() <= 0) {
-      response.setErrorMessage(ResponseMessages.INVALID_PAGE_SIZE);
-      status = HttpStatus.BAD_REQUEST;
-    } else if (filterParams.getPageNumber() <= 0) {
-      response.setErrorMessage(ResponseMessages.INVALID_PAGE_NUMBER);
-      status = HttpStatus.BAD_REQUEST;
-    } else {
+    try {
+      FilterParametersValidationUtils.validateFilterParameters(filterParams);
       response = phoneNumbersService.getPhoneNumbers(filterParams);
       if (CollectionUtils.isEmpty(response.getPhoneNumbers())) {
         status = HttpStatus.NO_CONTENT;
       }
+    } catch (InvalidParametersException e) {
+      response.setErrorMessage(e.getMessage());
+      status = HttpStatus.BAD_REQUEST;
     }
     return ResponseEntityHandler.handleResponseEntity(response, status);
   }

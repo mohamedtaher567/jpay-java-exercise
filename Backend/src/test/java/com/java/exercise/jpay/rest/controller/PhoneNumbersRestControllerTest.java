@@ -63,7 +63,7 @@ public class PhoneNumbersRestControllerTest extends JpayApplicationTests {
 
   @Test
   public void testValidRequest() throws Exception {
-    String payload = constructJson(createPhoneNumbersFilterParams(0, 10));
+    String payload = constructJson(createPhoneNumbersFilterParams(1, 10));
     PhoneNumbersResponse expectedResponseObject = createPhoneNumersResponse(Lists.list(new PhoneNumber("123", "000")), null);
     String expectedResponse = constructJson(expectedResponseObject);
     when(phoneNumbersService.getPhoneNumbers(phoneNumbersFilterParamsCaptor.capture())).thenReturn(expectedResponseObject);
@@ -113,7 +113,7 @@ public class PhoneNumbersRestControllerTest extends JpayApplicationTests {
 
   @Test
   public void testEmptyContent() throws Exception {
-    String payload = constructJson(createPhoneNumbersFilterParams(0, 10));
+    String payload = constructJson(createPhoneNumbersFilterParams(1, 10));
     PhoneNumbersResponse expectedResponseObject = createPhoneNumersResponse(Lists.newArrayList(), null);
     String expectedResponse = constructJson(expectedResponseObject);
     when(phoneNumbersService.getPhoneNumbers(phoneNumbersFilterParamsCaptor.capture())).thenReturn(expectedResponseObject);
