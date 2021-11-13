@@ -3,7 +3,9 @@ jpay java exercise
 # Backend Orientation
 - Backend is written in java using Spring Boot framework.
 - Unit tests are written using JUnit Test 5. Mockito is used. Test Coverage: 93.9%.
-
+- A new table is created in the database using flyway SQL migration.
+- The new table is for phone numbers `phone_numbers`. To hold phone numbers data and make it easy for filtering and pagination.
+- The table is populated using another flyway java migration.
 
 # Frontend Orientation
 - Frontend is written using React.js framework.
