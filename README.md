@@ -5,7 +5,7 @@ jpay java exercise
 - Unit tests are written using JUnit Test 5. Mockito is used. Test Coverage: 97.0%.
 
 
-# Fronend Orientation
+# Frontend Orientation
 - Frontend is written using React.js framework.
 - No tests are written for the frontend app.
 
