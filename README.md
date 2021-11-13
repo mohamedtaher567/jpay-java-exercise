@@ -33,7 +33,7 @@ jpay java exercise
 	- run docker container for backend:
 		- locate the data file and use its directory (${data_path}) in the building command:
 		`docker run -p 8080:8080 -v ${data_path}:/var/ jpay:backend`.
-		example:
+		- example:
 			`docker run -p 8080:8080 -v C:\\data_path\\:/var/ jpay:backend`
 		- you can change the accessible port, `-p xxxx:8080` instead.
 		- if you're running on windows, don't forget to escape back slash (`\`).
