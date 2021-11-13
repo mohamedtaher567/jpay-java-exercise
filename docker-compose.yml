@@ -1,0 +1,30 @@
+# Docker Compose file Reference (https://docs.docker.com/compose/compose-file/)
+
+version: '3.7'
+
+# Define services
+services:
+  # App backend service
+  backend:
+    # Configuration for building the docker image for the backend service
+    build:
+      context: Backend # Use dockerfile in the `Backend` directory.
+      dockerfile: Dockerfile
+    ports:
+      - "9090:8080"
+    restart: always
+    volumes:
+      - C:\\Users\\moham\\Downloads\\jpay\\jpay\\data:/var/ # mount local directory containing sample.db file with /var/ direcyory in container.
+
+  # Frontend Service 
+  frontend:
+    build:
+      context: Frontend # Use dockerfile in the `Frontend` directory.
+      dockerfile: Dockerfile
+    ports:
+      - "3030:3000"
+    environment:
+      - REACT_APP_API_BASE_URL=http://localhost:9090
+    restart: always
+    depends_on:
+      - backend

@@ -26,7 +26,11 @@ jpay java exercise
 	- Now you should be having your react app up and accessible to you using `localhost:3000`.
 
 # Building and Running using Docker:
-- Without docker-compose.yml
+- With `docker-compose.yml`
+	- Go to project directory
+	- `docker-compose up`
+	
+- Without `docker-compose.yml`
 	- build backend docker image:
 		- `cd Backend`
 		- use command: `docker build -t jpay:backend .`.
@@ -48,6 +52,3 @@ jpay java exercise
 		- you can change the accessible port, `yyyy:3000` instead.
 	- now react app is up and accessible to you via `localhost:3000` or `localhost:yyyy`.
 	- Go to browser and access react app.
-
-- With docker-compose.yml
-	- //TODO
