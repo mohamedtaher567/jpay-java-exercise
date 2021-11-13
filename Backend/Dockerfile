@@ -8,4 +8,5 @@ RUN mvn clean package spring-boot:repackage
 FROM openjdk:8-jdk-alpine
 COPY --from=MAVEN_TOOL_CHAIN /tmp/target/*.jar jpay.jar
 COPY --from=MAVEN_TOOL_CHAIN /tmp/target/application.properties application.properties
-ENTRYPOINT ["java","-jar","/jpay.jar"]
+ENTRYPOINT ["java", "-jar", "jpay.jar"]
+

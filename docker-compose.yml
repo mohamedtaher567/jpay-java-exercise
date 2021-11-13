@@ -14,7 +14,7 @@ services:
       - "8080:8080"
     restart: always
     volumes:
-      - C:\\Users\\moham\\Downloads\\jpay\\jpay\\data:/var/ # mount local directory containing sample.db file with /var/ direcyory in container.
+      - ${data_path}:/data/ # mount local directory containing sample.db file with /var/ direcyory in container.
 
   # Frontend Service 
   frontend:

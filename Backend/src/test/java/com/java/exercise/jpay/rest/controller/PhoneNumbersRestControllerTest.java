@@ -35,9 +35,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.java.exercise.jpay.configuration.JpayApplicationTests;
 import com.java.exercise.jpay.controller.PhoneNumbersRestController;
 import com.java.exercise.jpay.controller.ResponseMessages;
-import com.java.exercise.jpay.dto.PhoneNumber;
 import com.java.exercise.jpay.dto.PhoneNumbersFilterParams;
 import com.java.exercise.jpay.dto.PhoneNumbersResponse;
+import com.java.exercise.jpay.model.PhoneNumber;
 import com.java.exercise.jpay.service.PhoneNumbersService;
 
 @TestInstance(Lifecycle.PER_CLASS)
@@ -64,7 +64,7 @@ public class PhoneNumbersRestControllerTest extends JpayApplicationTests {
   @Test
   public void testValidRequest() throws Exception {
     String payload = constructJson(createPhoneNumbersFilterParams(1, 10));
-    PhoneNumbersResponse expectedResponseObject = createPhoneNumersResponse(Lists.list(new PhoneNumber("123", "000")), null);
+    PhoneNumbersResponse expectedResponseObject = createPhoneNumersResponse(Lists.list(createPhoneNumber("123", 212)), null);
     String expectedResponse = constructJson(expectedResponseObject);
     when(phoneNumbersService.getPhoneNumbers(phoneNumbersFilterParamsCaptor.capture())).thenReturn(expectedResponseObject);
     verifyResponse(expectedResponse, performAndMatchStatus(payload, status().isOk()), HttpStatus.OK.value());

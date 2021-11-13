@@ -2,7 +2,7 @@
 jpay java exercise
 # Backend Orientation
 - Backend is written in java using Spring Boot framework.
-- Unit tests are written using JUnit Test 5. Mockito is used. Test Coverage: 97.0%.
+- Unit tests are written using JUnit Test 5. Mockito is used. Test Coverage: 90.9%.
 
 
 # Frontend Orientation
@@ -16,8 +16,9 @@ jpay java exercise
 	- You will now find the uber jar file `Backend/target/jpay-0.0.1-SNAPSHOT.jar`
 - Run backend:
 	- `cd target`
-	- You can edit application.properties to set `spring.datasource.url=jdbc:sqlite:/var/sample.db` replacing `/var/sample.db` with your data file path.
-	- Then run `java -jar jpay-0.0.1-SNAPSHOT.jar`.
+	- You can edit application.properties to set `spring.datasource.url=jdbc:sqlite:/data/sample.db` replacing `/data/sample.db` with your relative data file path.
+	- Also replace flyway url with your relative data directory, i.e. `spring.flyway.url=jdbc:sqlite:data/sample.db`
+	- Then run `java -jar jpay-0.0.1-SNAPSHOT.jar`. 
 	- Now your spring boot app should be up and accessible to you using `localhost:8080`.
 - Run frontend:
 	- Go to the project directory.
@@ -28,6 +29,8 @@ jpay java exercise
 # Building and Running using Docker:
 - With `docker-compose.yml`
 	- Go to project directory.
+	- Open `docker-compose.yml`.
+	- Edit the `${data_path}`, replace it with the directory containing a file named `sample.db` that has your data.
 	- Run command `docker-compose up`.
 	- After it finishes building/starting, application would be accessible via `http://localhost:3000`.
 	
@@ -37,9 +40,9 @@ jpay java exercise
 		- Use command: `docker build -t jpay:backend .`.
 	- Run docker container for backend:
 		- Locate the data file and use its directory (${data_path}) in the building command:
-		`docker run -p 8080:8080 -v ${data_path}:/var/ jpay:backend`.
+		`docker run -p 8080:8080 -v ${data_path}:/data/ jpay:backend`.
 		- Example:
-			`docker run -p 8080:8080 -v C:\\data_path\\:/var/ jpay:backend`
+			`docker run -p 8080:8080 -v C:\\data_path\\:/data/ jpay:backend`
 		- Local port can be changed also, `-p xxxx:8080` instead.
 		- If you're running on windows, don't forget to escape back slash (`\`).
 	- Now backend is running on docker and accessible to your local machine via `localhost:8080`, or `localhost:xxxx`.

@@ -4,16 +4,17 @@ import java.util.Set;
 
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
+import org.springframework.boot.autoconfigure.flyway.FlywayAutoConfiguration;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.ComponentScan;
 
-import com.java.exercise.jpay.dto.PhoneNumber;
 import com.java.exercise.jpay.dto.PhoneNumbersFilterParams;
+import com.java.exercise.jpay.model.PhoneNumber;
 
 @SpringBootTest(classes = {JpayApplicationTests.class})
 @EntityScan("com.java.exercise.jpay.model")
 @ComponentScan(basePackages = {"com.java.exercise.jpay.*"})
-@EnableAutoConfiguration
+@EnableAutoConfiguration(exclude = FlywayAutoConfiguration.class)
 public class JpayApplicationTests {
 
   protected static PhoneNumbersFilterParams createPhoneNumbersFilterParams(Integer pageNumber, Integer pageSize) {
@@ -30,8 +31,8 @@ public class JpayApplicationTests {
     return phoneNumbersFilterParams;
   }
 
-  protected PhoneNumber createPhoneNumber(String phoneNumber, String countryName) {
-    return new PhoneNumber(phoneNumber, countryName);
+  protected PhoneNumber createPhoneNumber(String phoneNumber, Integer countryCode) {
+    return new PhoneNumber(phoneNumber, countryCode);
   }
 
 }

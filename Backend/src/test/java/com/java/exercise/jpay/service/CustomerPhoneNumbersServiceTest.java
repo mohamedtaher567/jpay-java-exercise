@@ -1,6 +1,8 @@
 package com.java.exercise.jpay.service;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
@@ -9,6 +11,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import org.assertj.core.util.Lists;
 import org.assertj.core.util.Sets;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -17,33 +20,35 @@ import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.TestInstance.Lifecycle;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import com.java.exercise.jpay.configuration.JpayApplicationTests;
-import com.java.exercise.jpay.dto.PhoneNumber;
 import com.java.exercise.jpay.dto.PhoneNumberState;
 import com.java.exercise.jpay.dto.PhoneNumbersResponse;
-import com.java.exercise.jpay.model.Customer;
-import com.java.exercise.jpay.repository.CustomerRepository;
+import com.java.exercise.jpay.model.PhoneNumber;
+import com.java.exercise.jpay.repository.PhoneNumberRepository;
 import com.java.exercise.jpay.service.impl.CustomerPhoneNumbersServiceImpl;
 
 @TestInstance(Lifecycle.PER_CLASS)
 public class CustomerPhoneNumbersServiceTest extends JpayApplicationTests {
 
   private static final Set<Integer> INVALID_INDICIES = new HashSet<>();
-  private static final String MOROCO = "Moroco";
-  private static final String ETHIOPIA = "Ethiopia";
-  private static final String CAMEROON = "Cameroon";
-  private static final String MOZAMBIQUE = "Mozambique";
+  private static final Integer MOROCO = 212;
+  private static final Integer ETHIOPIA = 251;
+  private static final Integer CAMEROON = 237;
+  private static final Integer MOZAMBIQUE = 258;
 
   @InjectMocks
   private CustomerPhoneNumbersServiceImpl phoneNumersService;
 
   @Mock
-  private CustomerRepository customerRepository;
+  private PhoneNumberRepository phoneNumberRepo;
+
+  @Mock
+  private Page<PhoneNumber> page;
 
   private static List<PhoneNumber> TEST_PHONE_NUMBERS = new ArrayList<>();
-
-  private static List<Customer> customers = new ArrayList<>();
 
   @BeforeAll
   public void setup() {
@@ -61,9 +66,6 @@ public class CustomerPhoneNumbersServiceTest extends JpayApplicationTests {
     TEST_PHONE_NUMBERS.add(createPhoneNumber("(237) 673122155", CAMEROON));
     TEST_PHONE_NUMBERS.add(createPhoneNumber("(258) 847651504", MOZAMBIQUE));
     TEST_PHONE_NUMBERS.add(createPhoneNumber("(258) 847651504", MOZAMBIQUE));
-    TEST_PHONE_NUMBERS.forEach(phoneNumber -> {
-      customers.add(createCustomer(phoneNumber.getNumber()));
-    });
     INVALID_INDICIES.add(0);
     INVALID_INDICIES.add(2);
     INVALID_INDICIES.add(3);
@@ -73,7 +75,19 @@ public class CustomerPhoneNumbersServiceTest extends JpayApplicationTests {
 
   @BeforeEach
   public void mockCustomerRepositoryResponse() {
-    when(customerRepository.findAll()).thenReturn(customers);
+    when(phoneNumberRepo.findAll(any(Pageable.class))).thenReturn(page);
+    when(page.getContent()).thenReturn(TEST_PHONE_NUMBERS);
+    when(phoneNumberRepo.findByValidIn(eq(Sets.newHashSet(Lists.newArrayList(Boolean.TRUE))), any()))
+        .thenReturn(filterPhoneNumbers(TEST_PHONE_NUMBERS, INVALID_INDICIES, false));
+    when(phoneNumberRepo.findByValidIn(eq(Sets.newHashSet(Lists.newArrayList(Boolean.FALSE))), any()))
+        .thenReturn(filterPhoneNumbers(TEST_PHONE_NUMBERS, INVALID_INDICIES, true));
+    when(phoneNumberRepo.findByValidIn(eq(Sets.newHashSet(Lists.newArrayList(Boolean.FALSE, Boolean.TRUE))), any())).thenReturn(TEST_PHONE_NUMBERS);
+    when(phoneNumberRepo.findByCountryCodeIn(eq(Sets.newHashSet(Lists.newArrayList(MOROCO, MOZAMBIQUE))), any())).thenReturn(TEST_PHONE_NUMBERS
+        .stream().filter(phoneNumber -> phoneNumber.getCountryCode().equals(MOROCO) || phoneNumber.getCountryCode().equals(MOZAMBIQUE))
+        .collect(Collectors.toList()));
+    when(phoneNumberRepo.findByValidInAndCountryCodeIn(eq(Sets.newHashSet(Lists.newArrayList(Boolean.FALSE))),
+        eq(Sets.newHashSet(Lists.newArrayList(ETHIOPIA, CAMEROON))), any()))
+            .thenReturn(filterPhoneNumbers(TEST_PHONE_NUMBERS, Sets.newLinkedHashSet(3, 6), true));
   }
 
   @Test
@@ -89,7 +103,7 @@ public class CustomerPhoneNumbersServiceTest extends JpayApplicationTests {
     countryCodes.add(258);
     PhoneNumbersResponse phoneNumbers = phoneNumersService.getPhoneNumbers(createPhoneNumbersFilterParams(1, 10, null, countryCodes));
     assertEquals(TEST_PHONE_NUMBERS.stream()
-        .filter(phoneNumber -> phoneNumber.getCountryName().equals(MOROCO) || phoneNumber.getCountryName().equals(MOZAMBIQUE))
+        .filter(phoneNumber -> phoneNumber.getCountryCode().equals(MOROCO) || phoneNumber.getCountryCode().equals(MOZAMBIQUE))
         .collect(Collectors.toList()), phoneNumbers.getPhoneNumbers());
   }
 
@@ -121,18 +135,12 @@ public class CustomerPhoneNumbersServiceTest extends JpayApplicationTests {
   @Test
   public void testFilterCountryCodesAndStates() {
     Set<Integer> countryCodes = new HashSet<>();
-    countryCodes.add(237);
-    countryCodes.add(251);
+    countryCodes.add(CAMEROON);
+    countryCodes.add(ETHIOPIA);
     Set<String> states = new HashSet<>();
     states.add(PhoneNumberState.INVALID.toString());
     PhoneNumbersResponse phoneNumbers = phoneNumersService.getPhoneNumbers(createPhoneNumbersFilterParams(1, 10, states, countryCodes));
     assertEquals(filterPhoneNumbers(TEST_PHONE_NUMBERS, Sets.newLinkedHashSet(3, 6), true), phoneNumbers.getPhoneNumbers());
-  }
-
-  private static Customer createCustomer(String phoneNumber) {
-    Customer customer = new Customer();
-    customer.setPhone(phoneNumber);
-    return customer;
   }
 
   private static List<PhoneNumber> filterPhoneNumbers(List<PhoneNumber> phoneNumbers, Set<Integer> indicies, boolean include) {

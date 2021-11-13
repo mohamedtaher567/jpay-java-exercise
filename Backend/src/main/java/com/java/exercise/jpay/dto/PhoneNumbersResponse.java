@@ -2,6 +2,8 @@ package com.java.exercise.jpay.dto;
 
 import java.util.List;
 
+import com.java.exercise.jpay.model.PhoneNumber;
+
 public class PhoneNumbersResponse {
   private List<PhoneNumber> phoneNumbers;
   private Long totalCount;
