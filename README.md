@@ -31,6 +31,11 @@ jpay java exercise
 	- Go to project directory.
 	- Open `docker-compose.yml`.
 	- Edit the `${data_path}`, replace it with the directory containing a file named `sample.db` that has your data.
+	- Example
+		```
+		    volumes:
+				- C:\\data\\:/data/ # mount local directory containing sample.db file with /var/ direcyory in container.
+		```
 	- Run command `docker-compose up`.
 	- After it finishes building/starting, application would be accessible via `http://localhost:3000`.
 	
@@ -39,7 +44,7 @@ jpay java exercise
 		- `cd Backend`
 		- Use command: `docker build -t jpay:backend .`.
 	- Run docker container for backend:
-		- Locate the data file and use its directory (${data_path}) in the building command:
+		- Locate the data file and use its directory (${data_path}) in the running command:
 		`docker run -p 8080:8080 -v ${data_path}:/data/ jpay:backend`.
 		- Example:
 			`docker run -p 8080:8080 -v C:\\data_path\\:/data/ jpay:backend`
@@ -55,4 +60,4 @@ jpay java exercise
 		- Variable `REACT_APP_API_BASE_URL`'s value can be changed to url you want that represents backend url (don't forget protocol prefix, `http://` or `https://`).
 		- Local port can be changedalso, `-p yyyy:3000` instead.
 	- Now react app is up and accessible to you via `localhost:3000` or `localhost:yyyy`.
-	- Go to browser and access react app.
+	- Go to browser and access react app via `localhost:3000`.
