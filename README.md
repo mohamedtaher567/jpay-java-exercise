@@ -27,9 +27,9 @@ jpay java exercise
 
 # Building and Running using Docker:
 - With `docker-compose.yml`
-	- Go to project directory
-	- Run command `docker-compose up`
-	- After it finishes building/starting, application would be accessible via `http://localhost:3000`
+	- Go to project directory.
+	- Run command `docker-compose up`.
+	- After it finishes building/starting, application would be accessible via `http://localhost:3000`.
 	
 - Without `docker-compose.yml`
 	- Build backend docker image:
