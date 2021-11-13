@@ -24,7 +24,7 @@ services:
     ports:
       - "3030:3000"
     environment:
-      - REACT_APP_API_BASE_URL=http://localhost:9090
+      - REACT_APP_API_BASE_URL=http://localhost:8080
     restart: always
     depends_on:
       - backend
