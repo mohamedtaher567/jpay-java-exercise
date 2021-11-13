@@ -1,5 +1,4 @@
 import React from 'react';
-import { MDBDataTable } from 'mdbreact';
 import DataTable from 'react-data-table-component';
 
 function PaginatedTable (props) {
