@@ -2,7 +2,7 @@
 jpay java exercise
 # Backend Orientation
 - Backend is written in java using Spring Boot framework.
-- Unit tests are written using JUnit Test 5. Mockito is used. Test Coverage: 93.8%.
+- Unit tests are written using JUnit Test 5. Mockito is used. Test Coverage: 93.9%.
 
 
 # Frontend Orientation
