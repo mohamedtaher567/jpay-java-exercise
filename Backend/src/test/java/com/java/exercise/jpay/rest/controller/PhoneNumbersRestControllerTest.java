@@ -30,9 +30,6 @@ import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.ResultMatcher;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.java.exercise.jpay.configuration.JpayApplicationTests;
 import com.java.exercise.jpay.controller.PhoneNumbersRestController;
 import com.java.exercise.jpay.controller.ResponseMessages;
 import com.java.exercise.jpay.dto.PhoneNumbersFilterParams;
@@ -42,7 +39,7 @@ import com.java.exercise.jpay.service.PhoneNumbersService;
 
 @TestInstance(Lifecycle.PER_CLASS)
 @ExtendWith(MockitoExtension.class)
-public class PhoneNumbersRestControllerTest extends JpayApplicationTests {
+public class PhoneNumbersRestControllerTest extends RestControllerTest {
   private static final String PHONE_NUMBERS_URL = "/phoneNumbers";
 
   @InjectMocks
@@ -135,11 +132,6 @@ public class PhoneNumbersRestControllerTest extends JpayApplicationTests {
 
   private void verifyServiceHits(int n) {
     verify(phoneNumbersService, times(n)).getPhoneNumbers(any());
-  }
-
-  private static String constructJson(Object object) throws JsonProcessingException {
-    ObjectMapper objectMapper = new ObjectMapper();
-    return objectMapper.writeValueAsString(object);
   }
 
   private static PhoneNumbersResponse createPhoneNumersResponse(List<PhoneNumber> phoneNumbers, String errorMessage) {

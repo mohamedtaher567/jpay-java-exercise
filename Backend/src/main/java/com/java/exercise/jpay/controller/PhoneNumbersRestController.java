@@ -14,10 +14,9 @@ import org.springframework.web.bind.annotation.RestController;
 import com.java.exercise.jpay.controller.response.entity.ResponseEntityHandler;
 import com.java.exercise.jpay.dto.PhoneNumbersFilterParams;
 import com.java.exercise.jpay.dto.PhoneNumbersResponse;
+import com.java.exercise.jpay.exceptions.InvalidParametersException;
 import com.java.exercise.jpay.service.PhoneNumbersService;
 import com.java.exercise.jpay.utils.FilterParametersValidationUtils;
-
-import exceptions.InvalidParametersException;
 
 @RequestMapping("phoneNumbers")
 @RestController

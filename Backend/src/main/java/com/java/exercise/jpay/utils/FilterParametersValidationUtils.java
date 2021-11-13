@@ -2,8 +2,7 @@ package com.java.exercise.jpay.utils;
 
 import com.java.exercise.jpay.controller.ResponseMessages;
 import com.java.exercise.jpay.dto.PhoneNumbersFilterParams;
-
-import exceptions.InvalidParametersException;
+import com.java.exercise.jpay.exceptions.InvalidParametersException;
 
 public class FilterParametersValidationUtils {
   public static void validateFilterParameters(PhoneNumbersFilterParams filterParams) throws InvalidParametersException {

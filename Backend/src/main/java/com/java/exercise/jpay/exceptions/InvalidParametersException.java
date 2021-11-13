@@ -1,4 +1,4 @@
-package exceptions;
+package com.java.exercise.jpay.exceptions;
 
 public class InvalidParametersException extends Exception {
   String errorMessage;

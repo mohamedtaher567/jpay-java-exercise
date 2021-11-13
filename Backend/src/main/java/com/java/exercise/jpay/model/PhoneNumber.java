@@ -39,16 +39,8 @@ public class PhoneNumber extends HasId {
     return countryCode;
   }
 
-  public void setCountryCode(Integer countryCode) {
-    this.countryCode = countryCode;
-  }
-
   public Boolean getValid() {
     return valid;
-  }
-
-  public void setValid(Boolean valid) {
-    this.valid = valid;
   }
 
   @Override

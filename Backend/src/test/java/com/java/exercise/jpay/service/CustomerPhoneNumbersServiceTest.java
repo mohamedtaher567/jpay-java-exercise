@@ -7,6 +7,7 @@ import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -49,6 +50,9 @@ public class CustomerPhoneNumbersServiceTest extends JpayApplicationTests {
   private Page<PhoneNumber> page;
 
   private static List<PhoneNumber> TEST_PHONE_NUMBERS = new ArrayList<>();
+  private List<PhoneNumber> countryFilteredPhoneNumbers = null;
+  private List<Integer> countryCodesFilter;
+  private LinkedHashSet<Integer> ethiopiaAndCameroonInvalidPhonesIndicies;
 
   @BeforeAll
   public void setup() {
@@ -70,7 +74,11 @@ public class CustomerPhoneNumbersServiceTest extends JpayApplicationTests {
     INVALID_INDICIES.add(2);
     INVALID_INDICIES.add(3);
     INVALID_INDICIES.add(6);
-
+    countryFilteredPhoneNumbers = TEST_PHONE_NUMBERS.stream()
+        .filter(phoneNumber -> phoneNumber.getCountryCode().equals(MOROCO) || phoneNumber.getCountryCode().equals(MOZAMBIQUE))
+        .collect(Collectors.toList());
+    countryCodesFilter = Lists.newArrayList(MOROCO, MOZAMBIQUE);
+    ethiopiaAndCameroonInvalidPhonesIndicies = Sets.newLinkedHashSet(3, 6);
   }
 
   @BeforeEach
@@ -82,12 +90,10 @@ public class CustomerPhoneNumbersServiceTest extends JpayApplicationTests {
     when(phoneNumberRepo.findByValidIn(eq(Sets.newHashSet(Lists.newArrayList(Boolean.FALSE))), any()))
         .thenReturn(filterPhoneNumbers(TEST_PHONE_NUMBERS, INVALID_INDICIES, true));
     when(phoneNumberRepo.findByValidIn(eq(Sets.newHashSet(Lists.newArrayList(Boolean.FALSE, Boolean.TRUE))), any())).thenReturn(TEST_PHONE_NUMBERS);
-    when(phoneNumberRepo.findByCountryCodeIn(eq(Sets.newHashSet(Lists.newArrayList(MOROCO, MOZAMBIQUE))), any())).thenReturn(TEST_PHONE_NUMBERS
-        .stream().filter(phoneNumber -> phoneNumber.getCountryCode().equals(MOROCO) || phoneNumber.getCountryCode().equals(MOZAMBIQUE))
-        .collect(Collectors.toList()));
+    when(phoneNumberRepo.findByCountryCodeIn(eq(Sets.newHashSet(countryCodesFilter)), any())).thenReturn(countryFilteredPhoneNumbers);
     when(phoneNumberRepo.findByValidInAndCountryCodeIn(eq(Sets.newHashSet(Lists.newArrayList(Boolean.FALSE))),
         eq(Sets.newHashSet(Lists.newArrayList(ETHIOPIA, CAMEROON))), any()))
-            .thenReturn(filterPhoneNumbers(TEST_PHONE_NUMBERS, Sets.newLinkedHashSet(3, 6), true));
+            .thenReturn(filterPhoneNumbers(TEST_PHONE_NUMBERS, ethiopiaAndCameroonInvalidPhonesIndicies, true));
   }
 
   @Test
@@ -102,9 +108,7 @@ public class CustomerPhoneNumbersServiceTest extends JpayApplicationTests {
     countryCodes.add(212);
     countryCodes.add(258);
     PhoneNumbersResponse phoneNumbers = phoneNumersService.getPhoneNumbers(createPhoneNumbersFilterParams(1, 10, null, countryCodes));
-    assertEquals(TEST_PHONE_NUMBERS.stream()
-        .filter(phoneNumber -> phoneNumber.getCountryCode().equals(MOROCO) || phoneNumber.getCountryCode().equals(MOZAMBIQUE))
-        .collect(Collectors.toList()), phoneNumbers.getPhoneNumbers());
+    assertEquals(countryFilteredPhoneNumbers, phoneNumbers.getPhoneNumbers());
   }
 
   @Test
@@ -140,7 +144,7 @@ public class CustomerPhoneNumbersServiceTest extends JpayApplicationTests {
     Set<String> states = new HashSet<>();
     states.add(PhoneNumberState.INVALID.toString());
     PhoneNumbersResponse phoneNumbers = phoneNumersService.getPhoneNumbers(createPhoneNumbersFilterParams(1, 10, states, countryCodes));
-    assertEquals(filterPhoneNumbers(TEST_PHONE_NUMBERS, Sets.newLinkedHashSet(3, 6), true), phoneNumbers.getPhoneNumbers());
+    assertEquals(filterPhoneNumbers(TEST_PHONE_NUMBERS, ethiopiaAndCameroonInvalidPhonesIndicies, true), phoneNumbers.getPhoneNumbers());
   }
 
   private static List<PhoneNumber> filterPhoneNumbers(List<PhoneNumber> phoneNumbers, Set<Integer> indicies, boolean include) {
